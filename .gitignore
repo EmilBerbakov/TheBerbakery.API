@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/TheBerbakery.API/appsettings.json
+/TheBerbakery.API/appsettings.Development.json
