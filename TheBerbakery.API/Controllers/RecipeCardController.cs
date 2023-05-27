@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Net;
 using TheBerbakery.API.Models;
 using TheBerbakery.API.Services.Interfaces;
 
@@ -14,6 +11,7 @@ namespace TheBerbakery.API.Controllers
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Route("RecipeCard.API/[controller]")]
     [ApiController]
+    //TODO - Decide if successful search with no results should return a 404 or a 200 with an empty array
     public class RecipeCardController : ControllerBase
     {
         #region Service Constructor

@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
-using System.Numerics;
 using TheBerbakery.API.Models;
 using TheBerbakery.API.Services.Classes;
 using TheBerbakery.API.Services.Interfaces;
