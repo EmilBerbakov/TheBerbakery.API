@@ -32,6 +32,21 @@ namespace TheBerbakery.API.Services.Classes
             }).ToListAsync();
             return recipeCards;
         }
+
+        public async Task<List<Recipe>> GetTopXRecentRecipeCards(int topX)
+        {
+            var recipeCards = await _theBerbakeryContext.Recipes.OrderByDescending(x => x.RecipeId).Take(topX).Select(x => new Recipe
+            {
+                RecipeId = x.RecipeId,
+                RecipeName = x.RecipeName,
+                RecipeBlurb = x.RecipeBlurb,
+                RecipeDescription = x.RecipeDescription,
+                RecipeImageUrl = x.RecipeImageUrl,
+                RecipeSteps = x.RecipeSteps,
+                RecipeIngredients = x.RecipeIngredients
+            }).ToListAsync();
+            return recipeCards;
+        }
         #endregion
     }
 }
