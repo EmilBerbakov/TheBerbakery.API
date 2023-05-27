@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using TheBerbakery.API.Models;
+using TheBerbakery.API.Services.Interfaces;
 
 namespace TheBerbakery.API.Controllers
 {
@@ -12,12 +15,25 @@ namespace TheBerbakery.API.Controllers
     public class RecipeCardController : ControllerBase
     {
         #region Service Constructor
-
+        private readonly IRecipeCardService _recipeCardService;
+        public RecipeCardController(IRecipeCardService recipeCardService)
+        {
+            _recipeCardService = recipeCardService;
+        }
         #endregion
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("recipeCards")]
+        public async Task<ActionResult<List<Recipe>>> GetRecipeCards([Required][FromQuery]int[] recipeIds)
+        {
+            var recipeCards = await _recipeCardService.GetRecipeCards(recipeIds);
+            if (recipeCards == null)
+            {
+                return NotFound();
+            }
+            return Ok(recipeCards);
+        }
 
 
     }

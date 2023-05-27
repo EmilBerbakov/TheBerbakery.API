@@ -13,11 +13,11 @@ public partial class TheBerbakeryContext : DbContext
     {
     }
 
-    public virtual DbSet<RecipeIngredients> RecipeIngredients { get; set; }
+    public virtual DbSet<Recipe> Recipes { get; set; }
 
-    public virtual DbSet<RecipeSteps> RecipeSteps { get; set; }
+    public virtual DbSet<RecipeIngredient> RecipeIngredients { get; set; }
 
-    public virtual DbSet<Recipes> Recipes { get; set; }
+    public virtual DbSet<RecipeStep> RecipeSteps { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,55 +25,7 @@ public partial class TheBerbakeryContext : DbContext
             .UseCollation("utf8mb4_general_ci")
             .HasCharSet("utf8mb4");
 
-        modelBuilder.Entity<RecipeIngredients>(entity =>
-        {
-            entity.HasKey(e => new { e.RecipeId, e.IngredientId })
-                .HasName("PRIMARY")
-                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-            entity.ToTable("recipe_ingredients", tb => tb.HasComment("Ingredients for a specific recipe\r\nWhen a recipe is deleted, all recipe steps and ingredients associated with the deleted recipe are also deleted"));
-
-            entity.Property(e => e.RecipeId)
-                .HasColumnType("int(11)")
-                .HasColumnName("recipe_id");
-            entity.Property(e => e.IngredientId)
-                .HasColumnType("int(11)")
-                .HasColumnName("ingredient_id");
-            entity.Property(e => e.IngredientDescription)
-                .IsRequired()
-                .HasMaxLength(100)
-                .HasColumnName("ingredient_description");
-
-            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeIngredients)
-                .HasForeignKey(d => d.RecipeId)
-                .HasConstraintName("recipe_ingredients_FK");
-        });
-
-        modelBuilder.Entity<RecipeSteps>(entity =>
-        {
-            entity.HasKey(e => new { e.RecipeId, e.RecipeStep })
-                .HasName("PRIMARY")
-                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-            entity.ToTable("recipe_steps", tb => tb.HasComment("Steps for a recipe:\r\nrecipie_id is a foreign key to recipe_id in recipes\r\nrecipe_step is used to order the recipe steps"));
-
-            entity.Property(e => e.RecipeId)
-                .HasColumnType("int(11)")
-                .HasColumnName("recipe_id");
-            entity.Property(e => e.RecipeStep)
-                .HasColumnType("int(11)")
-                .HasColumnName("recipe_step");
-            entity.Property(e => e.RecipeStepInstruction)
-                .IsRequired()
-                .HasMaxLength(100)
-                .HasColumnName("recipe_step_instruction");
-
-            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeSteps)
-                .HasForeignKey(d => d.RecipeId)
-                .HasConstraintName("recipe_steps_FK");
-        });
-
-        modelBuilder.Entity<Recipes>(entity =>
+        modelBuilder.Entity<Recipe>(entity =>
         {
             entity.HasKey(e => e.RecipeId).HasName("PRIMARY");
 
@@ -102,6 +54,54 @@ public partial class TheBerbakeryContext : DbContext
                 .HasMaxLength(255)
                 .HasComment("the name of the recipe")
                 .HasColumnName("recipe_name");
+        });
+
+        modelBuilder.Entity<RecipeIngredient>(entity =>
+        {
+            entity.HasKey(e => new { e.RecipeId, e.IngredientId })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+            entity.ToTable("recipe_ingredients", tb => tb.HasComment("Ingredients for a specific recipe\r\nWhen a recipe is deleted, all recipe steps and ingredients associated with the deleted recipe are also deleted"));
+
+            entity.Property(e => e.RecipeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("recipe_id");
+            entity.Property(e => e.IngredientId)
+                .HasColumnType("int(11)")
+                .HasColumnName("ingredient_id");
+            entity.Property(e => e.IngredientDescription)
+                .IsRequired()
+                .HasMaxLength(100)
+                .HasColumnName("ingredient_description");
+
+            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeIngredients)
+                .HasForeignKey(d => d.RecipeId)
+                .HasConstraintName("recipe_ingredients_FK");
+        });
+
+        modelBuilder.Entity<RecipeStep>(entity =>
+        {
+            entity.HasKey(e => new { e.RecipeId, e.RecipeStepId })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+            entity.ToTable("recipe_steps", tb => tb.HasComment("Steps for a recipe:\r\nrecipie_id is a foreign key to recipe_id in recipes\r\nrecipe_step is used to order the recipe steps"));
+
+            entity.Property(e => e.RecipeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("recipe_id");
+            entity.Property(e => e.RecipeStepId)
+                .HasColumnType("int(11)")
+                .HasColumnName("recipe_step_id");
+            entity.Property(e => e.RecipeStepInstruction)
+                .IsRequired()
+                .HasMaxLength(100)
+                .HasColumnName("recipe_step_instruction");
+
+            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeSteps)
+                .HasForeignKey(d => d.RecipeId)
+                .HasConstraintName("recipe_steps_FK");
         });
 
         OnModelCreatingPartial(modelBuilder);

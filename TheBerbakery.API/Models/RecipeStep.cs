@@ -2,6 +2,8 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TheBerbakery.API.Models;
 
@@ -10,13 +12,13 @@ namespace TheBerbakery.API.Models;
 /// recipie_id is a foreign key to recipe_id in recipes
 /// recipe_step is used to order the recipe steps
 /// </summary>
-public partial class RecipeSteps
+public partial class RecipeStep
 {
     public int RecipeId { get; set; }
 
-    public int RecipeStep { get; set; }
+    public int RecipeStepId { get; set; }
 
     public string RecipeStepInstruction { get; set; }
-
-    public virtual Recipes Recipe { get; set; }
+    [JsonIgnore]
+    public virtual Recipe Recipe { get; set; }
 }
