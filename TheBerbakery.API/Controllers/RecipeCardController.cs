@@ -29,9 +29,13 @@ namespace TheBerbakery.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("recipeCards")]
-        public async Task<ActionResult<List<Recipe>>> GetRecipeCards([Required][FromQuery]int[] recipeIds)
+        public async Task<ActionResult<List<Recipe>>> GetRecipeCards([FromQuery]int[] recipeIds, string? recipeName = null)
         {
-            var recipeCards = await _recipeCardService.GetRecipeCards(recipeIds);
+            if (recipeIds.Length == 0 &&  recipeName == null)
+            {
+                return BadRequest();
+            }
+            var recipeCards = await _recipeCardService.GetRecipeCards(recipeIds, recipeName);
             if (recipeCards.Count == 0)
             {
                 return NotFound();

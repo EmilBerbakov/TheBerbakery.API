@@ -16,7 +16,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRecipeCardService, RecipeCardService>();
 builder.Services.AddControllers();
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        //TODO - replace with TheBerbakery's url
+        policy.WithOrigins("localhost:4200", "http://localhost:4200", "https:localhost:4200");
+    });
+});
 var connectionString = Configuration.GetSection("Database:ConnectionString").Value;
 string[] version = Configuration.GetSection("Database:Version").Value.Split('.').ToArray();
 var serverVersion = new MariaDbServerVersion(new Version(Int32.Parse(version[0]), Int32.Parse(version[1]), Int32.Parse(version[2])));
@@ -105,5 +112,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors();
 
 app.Run();

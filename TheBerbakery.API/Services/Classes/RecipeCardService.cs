@@ -16,10 +16,14 @@ namespace TheBerbakery.API.Services.Classes
         #endregion
 
         #region Recipe Card
-        public async Task<List<Recipe>> GetRecipeCards(int[] recipeIds)
+        public async Task<List<Recipe>> GetRecipeCards(int[] recipeIds, string recipeName)
         {
-            HashSet<int> recipeHash = recipeIds.ToHashSet<int>();
-            var recipeCards = await _theBerbakeryContext.Recipes.Where(x => recipeHash.Contains(x.RecipeId)).Select(x => new Recipe
+            HashSet<int> recipeHash = new();
+            if (recipeIds.Length > 0)
+            {
+                recipeHash = recipeIds.ToHashSet<int>();
+            }
+            var recipeCards = await _theBerbakeryContext.Recipes.Where(x => (recipeIds.Length == 0 || recipeHash.Contains(x.RecipeId)) && (string.IsNullOrEmpty(recipeName) || x.RecipeName.Contains(recipeName)) ).Select(x => new Recipe
             {
                 RecipeId = x.RecipeId,
                 RecipeName = x.RecipeName,
