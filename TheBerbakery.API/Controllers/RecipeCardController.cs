@@ -52,9 +52,9 @@ namespace TheBerbakery.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("recentRecipeCards")]
 
-        public async Task<ActionResult<List<Recipe>>> GetRecentRecipeCards( int topX = 9)
+        public async Task<ActionResult<List<Recipe>>> GetRecentRecipeCards( int topX = 12)
         {
-            if (topX <= 0 || topX > 9)
+            if (topX <= 0 || topX > 12)
             {
                 return BadRequest();
             }
