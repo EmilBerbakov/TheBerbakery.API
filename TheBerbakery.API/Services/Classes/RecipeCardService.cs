@@ -23,7 +23,7 @@ namespace TheBerbakery.API.Services.Classes
             {
                 recipeHash = recipeIds.ToHashSet<int>();
             }
-            var recipeCards = await _theBerbakeryContext.Recipes.Where(x => (recipeIds.Length == 0 || recipeHash.Contains(x.RecipeId)) && (string.IsNullOrEmpty(recipeName) || x.RecipeName.Contains(recipeName)) ).Select(x => new Recipe
+            var recipeCards = await _theBerbakeryContext.Recipes.Where(x => (recipeIds.Length == 0 || recipeHash.Contains(x.RecipeId)) && (string.IsNullOrEmpty(recipeName) || x.RecipeName.Contains(recipeName.Trim())) ).Select(x => new Recipe
             {
                 RecipeId = x.RecipeId,
                 RecipeName = x.RecipeName,
